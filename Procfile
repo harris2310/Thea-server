@@ -1,0 +1,1 @@
+web: node server/generator/app.js
