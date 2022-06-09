@@ -1,1 +1,1 @@
-web: node server/generator/index.js
+web: npm start
