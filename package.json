@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server/generator/index.js",
+    "start": "node src/index.js",
     "test": "nodemon --exec 'mocha -R min'"
   },
   "dependencies": {
