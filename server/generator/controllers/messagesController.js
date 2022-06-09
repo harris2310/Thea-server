@@ -8,7 +8,7 @@ const dbConfig = require('../config/db');
 const uploadValidation = require('../validation/validation');
 
 const url = dbConfig.url;
-const baseUrl = "http://localhost:5000/messages/files/";
+const baseUrl = "https://thea-app-server.herokuapp.com/messages/files/";
 
 
 
