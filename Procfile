@@ -1,1 +1,1 @@
-web: node server/generator/app.js
+web: node server/generator/index.js
