@@ -9,6 +9,7 @@ const uploadValidation = require('../validation/validation');
 
 const url = dbConfig.url;
 const baseUrl = "https://thea-app-server.herokuapp.com/messages/files/";
+const baseUrlDev = "localhost:5000/messages/files/"
 
 
 
@@ -34,7 +35,7 @@ async function initialMessages(req, res, next) {
     await cursor.forEach((doc) => {
       fileInfos.push({
         name: doc.filename,
-        url: baseUrl + doc.filename,
+        url: baseUrlDev + doc.filename,
       });
     });
   } catch (error) {
@@ -92,7 +93,7 @@ async function getFiles(req, res, next) {
     await cursor.forEach((doc) => {
       fileInfos.push({
         name: doc.filename,
-        url: baseUrl + doc.filename,
+        url: baseUrlDev + doc.filename,
       });
     });
     return res.status(200).send(fileInfos);
