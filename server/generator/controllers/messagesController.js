@@ -1,24 +1,21 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const connection = require('../connection/connection');
-const upload = require('../storage/upload');
-const {MongoClient} = require('mongodb');
-const {GridFSBucket} = require("mongodb");
-const dbConfig = require('../config/db');
-const uploadValidation = require('../validation/validation');
+const connection = require("../connection/connection");
+const upload = require("../storage/upload");
+const { MongoClient } = require("mongodb");
+const { GridFSBucket } = require("mongodb");
+const dbConfig = require("../config/db");
+const uploadValidation = require("../validation/validation");
 
 const url = dbConfig.url;
-const baseUrl = "https://thea-app-server.herokuapp.com/messages/files/";
-const baseUrlDev = "localhost:5000/messages/files/"
+const baseUrl = process.env.BASE_URL;
+const baseUrlDev = "localhost:5000/messages/files/";
 
-
-
-const mongoClient = new MongoClient(url, {useUnifiedTopology: true});
-
+const mongoClient = new MongoClient(url, { useUnifiedTopology: true });
 
 async function initialMessages(req, res, next) {
   let conn = await connection;
-  let cursor = await conn.db('Messages').collection('messages').find()
+  let cursor = await conn.db("Messages").collection("messages").find();
   let msgs = await cursor.toArray();
   //console.log(msgs);
   let fileInfos = [];
@@ -35,7 +32,7 @@ async function initialMessages(req, res, next) {
     await cursor.forEach((doc) => {
       fileInfos.push({
         name: doc.filename,
-        url: baseUrlDev + doc.filename,
+        url: baseUrl + doc.filename,
       });
     });
   } catch (error) {
@@ -44,13 +41,13 @@ async function initialMessages(req, res, next) {
     });
   }
   let data = [];
-    msgs.map((m) => {
-      fileInfos.map((i) => {
-        if (m.uniqueId == i.name) {
-          m.url = i.url;
-        }
-      })
-    })
+  msgs.map((m) => {
+    fileInfos.map((i) => {
+      if (m.uniqueId == i.name) {
+        m.url = i.url;
+      }
+    });
+  });
   console.log(msgs);
   res.json(msgs);
 }
@@ -61,22 +58,19 @@ async function postMessages(req, res, next) {
     await upload(req, res);
     let { latlng, message, uniqueId } = req.body;
     latlng = JSON.parse(latlng);
-    const { error } = await uploadValidation.validateAsync({latlng: latlng,
-                                                            message: message,
-                                                            uniqueId: uniqueId,
-                                                            });
-    const message1 = ({
+    const { error } = await uploadValidation.validateAsync({ latlng: latlng, message: message, uniqueId: uniqueId });
+    const message1 = {
       latlng: latlng,
       message: message,
       uniqueId: uniqueId,
-    });
-    const insertedMessage = await connBody.db('Messages').collection('messages').insertOne(message1);
+    };
+    const insertedMessage = await connBody.db("Messages").collection("messages").insertOne(message1);
     console.log(insertedMessage);
-    res.send('Message uploaded')
+    res.send("Message uploaded");
   } catch (e) {
     console.log(e);
   }
-} 
+}
 
 async function getFiles(req, res, next) {
   try {
