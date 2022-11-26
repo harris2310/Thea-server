@@ -8,7 +8,7 @@ const dbConfig = require("../config/db");
 const uploadValidation = require("../validation/validation");
 
 const url = dbConfig.url;
-const baseUrl = process.env.BASE_URL;
+const baseUrl = process.env.BASE_URL + "messages/files/";
 const baseUrlDev = "localhost:5000/messages/files/";
 
 const mongoClient = new MongoClient(url, { useUnifiedTopology: true });
